@@ -16,7 +16,7 @@ Cookie Breakdown
 Usage
 -----
 
-Instantiate an object with two keyword arguments containing the strings contained in the two cookies. Here's an example that will work on Pylons, although in production code be sure to handle case where no cookie exists:
+Instantiate an object with two keyword arguments containing the strings contained in the two cookies. Here's an example that will work on Pylons:
 
     from path.to.google_analytics_cookie import GoogleAnalyticsCookie
     utmz = request.cookies['__utmz'] if 'utmz' in request.cookies else None
