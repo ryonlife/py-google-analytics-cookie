@@ -8,7 +8,7 @@ Utilize it during your sign up process in order to permanently store information
 Cookie Breakdown
 ----------------
 
-[From __utma to __utmz](http://www.morevisibility.com/analyticsblog/from-__utma-to-__utmz-google-analytics-cookies.html) is a decent blog post that explains, at a high level, the various cookies Google Analytics uses to store data. The two most interesting (at least to me) are the utma and utmz cookies:
+[From utma to utmz](http://www.morevisibility.com/analyticsblog/from-__utma-to-__utmz-google-analytics-cookies.html) is a decent blog post that explains, at a high level, the various cookies Google Analytics uses to store data. The two most interesting (at least to me) are the utma and utmz cookies:
 
 * utma is a persistent cookie that tracks the number of visits, and times of the first and last visit
 * utmz keeps track of all the referral information, with useful nuggets like ad campaigns and referring domain or search engine
