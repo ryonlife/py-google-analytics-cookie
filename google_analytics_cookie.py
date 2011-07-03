@@ -23,7 +23,6 @@ from datetime import datetime
 
 class GoogleAnalyticsCookie():
     """ Parses the utma (visitor) and utmz (referral) Google Analytics cookies """
-    
     utmz = dict(
         domain_hash = None,
         timestamp = None,
@@ -36,8 +35,7 @@ class GoogleAnalyticsCookie():
             term = None,
             content = None
         )
-    )
-    
+    )       
     utma = dict(
         domain_hash = None,
         random_id = None,
@@ -45,9 +43,32 @@ class GoogleAnalyticsCookie():
         previous_visit_at = None,
         current_visit_at = None,
         session_counter = None
-    )
-        
+    )     
+    
+          
     def __init__(self, utmz=None, utma=None):
+        self.utmz = dict(
+            domain_hash = None,
+            timestamp = None,
+            session_counter = None,
+            campaign_number = None,
+            campaign_data = dict(
+                source = None,
+                name = None,
+                medium = None,
+                term = None,
+                content = None
+            )
+        )        
+        
+        self.utma = dict(
+            domain_hash = None,
+            random_id = None,
+            first_visit_at = None,
+            previous_visit_at = None,
+            current_visit_at = None,
+            session_counter = None
+        )        
         if utmz:
             self.utmz = self.__parse_utmz(utmz)
         if utma:
@@ -56,8 +77,11 @@ class GoogleAnalyticsCookie():
     def __parse_utmz(self, cookie):
         """ Parses the utmz cookie for visitor information """
         parsed = cookie.split('.')
-        if len(parsed) != 5:
+        if len(parsed) < 5:
             return self.utmz 
+        
+        #rejoin when src or cct might have a dot i.e. utmscr=example.com
+        parsed[4] = ".".join(parsed[4:])    
         
         translations = dict(
             utmcsr = 'source',
@@ -109,12 +133,13 @@ class GoogleAnalyticsCookie():
         
 class TestGoogleAnalyticsCookie(unittest.TestCase):
     
-    utmz = '174403709.1285179976.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)|utmctr=test'
+    utmz_test = '174403709.1285179976.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)|utmctr=test'
+    utmz_test2 = '81516565.1309300431.44.5.utmcsr=stumbleupon.com|utmccn=(referral)|utmcmd=referral|utmcct=/refer.php'
     utma = '174403709.475482016.1285179976.1285179976.1285179976.1'
     
     def test_parse_utmz(self):
         """ Should properly parse utmz cookie data """
-        gac = GoogleAnalyticsCookie(utmz=self.utmz)
+        gac = GoogleAnalyticsCookie(utmz=self.utmz_test)
         self.assertEqual(gac.utmz['domain_hash'], '174403709')
         self.assertEqual(gac.utmz['timestamp'], '1285179976')
         self.assertEqual(gac.utmz['session_counter'], '1')
@@ -125,10 +150,25 @@ class TestGoogleAnalyticsCookie(unittest.TestCase):
         self.assertEqual(gac.utmz['campaign_data']['medium'], '(none)')
         self.assertEqual(gac.utmz['campaign_data']['term'], 'test')
         self.assertEqual(gac.utmz['campaign_data']['content'], None)
+
+    def test_parse_utmz_referral_url(self):
+        """ Should properly parse utmz cookie data when there are periods in the src and in the content"""
+        gac = GoogleAnalyticsCookie(utmz=self.utmz_test2)
+        self.assertEqual(gac.utmz['domain_hash'], '81516565')
+        self.assertEqual(gac.utmz['timestamp'], '1309300431')
+        self.assertEqual(gac.utmz['session_counter'], '44')
+        self.assertEqual(gac.utmz['campaign_number'], '5')
         
+        self.assertEqual(gac.utmz['campaign_data']['source'], 'stumbleupon.com')
+        self.assertEqual(gac.utmz['campaign_data']['name'], '(referral)')
+        self.assertEqual(gac.utmz['campaign_data']['medium'], 'referral')
+        self.assertEqual(gac.utmz['campaign_data']['term'], None)
+        self.assertEqual(gac.utmz['campaign_data']['content'], '/refer.php')
+    
+            
     def test_parse_utmz_gclid(self):
         """ Should override normal campaign parsing when a Google Adwords click is involved """
-        gac = GoogleAnalyticsCookie(utmz=self.utmz + '|gclid=123')
+        gac = GoogleAnalyticsCookie(utmz=self.utmz_test + '|gclid=123')
         self.assertEqual(gac.utmz['campaign_data']['source'], 'google')
         self.assertEqual(gac.utmz['campaign_data']['name'], None)
         self.assertEqual(gac.utmz['campaign_data']['medium'], 'cpc')
@@ -182,4 +222,6 @@ class TestGoogleAnalyticsCookie(unittest.TestCase):
         self.assertEqual(gac.utma['previous_visit_at'], None)
         self.assertEqual(gac.utma['current_visit_at'], None)
         self.assertEqual(gac.utma['session_counter'], None)
-        
+
+if __name__ == '__main__':
+    unittest.main()
