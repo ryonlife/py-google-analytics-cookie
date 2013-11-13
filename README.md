@@ -1,7 +1,7 @@
 Python Google Analytics Cookie Parser
 =====================================
 
-[Python Google Analytics Cookie Parser](http://github.com/RyOnLife/Python-Google-Analytics-Cookie-Parser">http://github.com/RyOnLife/Python-Google-Analytics-Cookie-Parser) is a simple class for parsing useful visitor and referral data from a Google Analytics cookie.
+[Py Google Analytics Cookie](https://github.com/ryonlife/py-google-analytics-cookie) is a simple class for parsing useful visitor and referral data from a Google Analytics cookie.
 
 Utilize it during your sign up process in order to permanently store informations about where your customers came from, which opens the door for all sorts of useful metrics...
 
@@ -41,5 +41,3 @@ Your object will have utma and utmz attributes that are dictionaries with the fo
     gac.utmz['campaign_data']['medium']
     gac.utmz['campaign_data']['term']
     gac.utmz['campaign_data']['content']
-    
-Happy data mining!
