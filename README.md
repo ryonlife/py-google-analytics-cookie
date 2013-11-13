@@ -22,6 +22,14 @@ Instantiate an object with two keyword arguments containing the strings containe
     utmz = request.cookies['__utmz'] if 'utmz' in request.cookies else None
     utma = request.cookies['__utma'] if 'utma' in request.cookies else None
     gac = GoogleAnalyticsCookie(utmz=utmz, utma=utma)
+
+
+In Django:
+    from path.to.google_analytics_cookie import GoogleAnalyticsCookie
+    utmz = request.COOKIES['__utmz'] if '__utmz' in request.COOKIES else None
+    utma = request.COOKIES['__utma'] if '__utma' in request.COOKIES else None
+    gac = GoogleAnalyticsCookie(utmz=utmz, utma=utma)
+
     
 Your object will have utma and utmz attributes that are dictionaries with the following keys:
 
