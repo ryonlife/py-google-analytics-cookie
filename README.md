@@ -1,4 +1,4 @@
-Python Google Analytics Cookie Parser
+Py Google Analytics Cookie Parser
 =====================================
 
 [Py Google Analytics Cookie](https://github.com/ryonlife/py-google-analytics-cookie) is a simple class for parsing useful visitor and referral data from a Google Analytics cookie.
